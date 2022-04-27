@@ -29,7 +29,7 @@ class MongoDB(MixinMeta):
         self._disconnect_mongo()
         config = await self.config.custom("MONGODB").all()
         try:
-            self.client = AsyncIOMotorClient(**{k: v for k, v in config.items() if k != "db_name"})
+            self.client = AsyncIOMotorClient(config["host"])
             info = await self.client.server_info()
             if not info.get("versionArray", []) > REQUIRED_MONGODB_VERSION:
                 self.client.close()
